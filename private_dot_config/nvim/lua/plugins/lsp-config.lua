@@ -9,7 +9,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer" },
+				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff"},
 			})
 		end,
 	},
@@ -18,8 +18,33 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
+			--Lua ls
 			lspconfig.lua_ls.setup({ capabilities = capabilities })
+			-- Taplo
 			lspconfig.taplo.setup({})
+			-- Ruff
+			lspconfig.ruff.setup({
+				init_options = {
+					settings = {
+						organizeImports = true,
+					},
+				},
+			})
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),
+				callback = function(args)
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if client == nil then
+						return
+					end
+					if client.name == "ruff" then
+						-- Disable hover in favor of Pyright
+						client.server_capabilities.hoverProvider = false
+					end
+				end,
+				desc = "LSP: Disable hover capability from Ruff",
+			})
+			-- Based pyright
 			lspconfig.basedpyright.setup({
 				capabilities = capabilities,
 				settings = {
@@ -40,6 +65,7 @@ return {
 					},
 				},
 			})
+			-- Rust analyzer
 			lspconfig.rust_analyzer.setup({ capabilities = capabilities }, {
 				settings = {
 					["rust-analyzer"] = {
