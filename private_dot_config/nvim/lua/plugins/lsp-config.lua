@@ -9,7 +9,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff"},
+				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff" },
 			})
 		end,
 	},
@@ -29,6 +29,11 @@ return {
 						organizeImports = true,
 					},
 				},
+				on_attach = function(client)
+					client.server_capabilities.hoverProvider = false -- Keep hover from Pyright
+					client.server_capabilities.definitionProvider = false -- Prevent conflicts with Pyright
+					client.server_capabilities.referencesProvider = false -- Keep references from Pyright
+				end,
 			})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),
@@ -55,12 +60,14 @@ return {
 							diagnosticMode = "openFilesOnly",
 							useLibraryCodeForTypes = true,
 							autoSave = "onWindowChange", -- Auto save when window changes (can also use "afterDelay")
-							-- reportUnknownMemberType = false,
-							-- reportUnknownVariableType = false,
-							-- reportUnknownArgumentType = false,
-							-- reportUnknownReturnTypeError = false,
-							-- reportUnknownImport = false,
-							-- reportMissingModuleSource = false,
+							diagnosticSeverityOverrides = {
+								reportUnusedVariable = "none",
+								reportUnusedImport = "none",
+								reportDuplicateImport = "none",
+								reportPrivateUsage = "none",
+								reportUnnecessaryCast = "none",
+								reportShadowedImports = "none",
+							},
 						},
 					},
 				},
