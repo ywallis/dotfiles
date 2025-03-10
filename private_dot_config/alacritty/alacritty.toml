@@ -1,0 +1,18 @@
+[window]
+startup_mode = "Maximized"
+decorations = "none"
+[keyboard]
+bindings = [
+	{ key = "Equals", mods = "Control|Shift", action = "IncreaseFontSize" },
+	{ key = "F", mods = "Control|Shift", action = "ToggleFullscreen" },
+]
+
+[font]
+normal = { family = "JetBrains Mono", style = "Regular" }
+bold = { family = "JetBrains Mono", style = "Bold" }
+italic = { family = "JetBrains Mono", style = "Italic" }
+bold_italic = { family = "JetBrains Mono", style = "Bold Italic" }
+size = 12  # Adjust as needed
+
+[general]
+import = ["~/.config/alacritty/catppuccin-mocha.toml"]
