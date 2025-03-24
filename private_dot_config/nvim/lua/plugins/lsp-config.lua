@@ -9,7 +9,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff" },
+				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff", "gopls" },
 			})
 		end,
 	},
@@ -18,6 +18,8 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
+			-- Gopls
+			lspconfig.gopls.setup({})
 			--Lua ls
 			lspconfig.lua_ls.setup({ capabilities = capabilities })
 			-- Taplo
