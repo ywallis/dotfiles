@@ -18,12 +18,23 @@ return {
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
+
+			-- Generic on_attach function
+			local on_attach = function(client)
+				if client.name == "ruff" then
+					client.server_capabilities.hoverProvider = false
+				end
+			end
+
 			-- Gopls
-			lspconfig.gopls.setup({})
-			--Lua ls
-			lspconfig.lua_ls.setup({ capabilities = capabilities })
+			lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
+
+			-- Lua ls
+			lspconfig.lua_ls.setup({ capabilities = capabilities, on_attach = on_attach })
+
 			-- Taplo
-			lspconfig.taplo.setup({})
+			lspconfig.taplo.setup({ on_attach = on_attach })
+
 			-- Ruff
 			lspconfig.ruff.setup({
 				init_options = {
@@ -31,26 +42,9 @@ return {
 						organizeImports = true,
 					},
 				},
-				on_attach = function(client)
-					client.server_capabilities.hoverProvider = false -- Keep hover from Pyright
-					client.server_capabilities.definitionProvider = false -- Prevent conflicts with Pyright
-					client.server_capabilities.referencesProvider = false -- Keep references from Pyright
-				end,
+				on_attach = on_attach,
 			})
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),
-				callback = function(args)
-					local client = vim.lsp.get_client_by_id(args.data.client_id)
-					if client == nil then
-						return
-					end
-					if client.name == "ruff" then
-						-- Disable hover in favor of Pyright
-						client.server_capabilities.hoverProvider = false
-					end
-				end,
-				desc = "LSP: Disable hover capability from Ruff",
-			})
+
 			-- Based pyright
 			lspconfig.basedpyright.setup({
 				capabilities = capabilities,
@@ -61,21 +55,19 @@ return {
 							autoSearchPaths = true,
 							diagnosticMode = "openFilesOnly",
 							useLibraryCodeForTypes = true,
-							autoSave = "onWindowChange", -- Auto save when window changes (can also use "afterDelay")
+							autoSave = "onWindowChange",
 							diagnosticSeverityOverrides = {
 								reportUnusedVariable = "none",
 								reportUnusedImport = "none",
-								reportDuplicateImport = "none",
-								reportPrivateUsage = "none",
-								reportUnnecessaryCast = "none",
-								reportShadowedImports = "none",
 							},
 						},
 					},
 				},
 			})
+
 			-- Rust analyzer
-			lspconfig.rust_analyzer.setup({ capabilities = capabilities }, {
+			lspconfig.rust_analyzer.setup({
+				capabilities = capabilities,
 				settings = {
 					["rust-analyzer"] = {
 						diagnostics = {
@@ -85,26 +77,36 @@ return {
 				},
 			})
 
-			-- Mapping and format for hover
+			-- Keymaps and Hover
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-
-			-- Mapping and format for diagnostics
-			vim.keymap.set("n", "<leader>er", vim.diagnostic.open_float)
-			vim.diagnostic.config({
-				{
-					virtual_text = true,
-					signs = true,
-					underline = true,
-					update_in_insert = true,
-					severity_sort = false,
-				},
-				float = {
-					border = "rounded", -- Use "rounded", "single", "double", "solid", etc.
-				},
-			})
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
+				{ border = "rounded" })
+			vim.keymap.set("n", "<leader>er", vim.diagnostic.open_float, {})
+			vim.keymap.set("n", "<leader>en", vim.diagnostic.goto_next, {})
+			vim.keymap.set("n", "<leader>ep", vim.diagnostic.goto_prev, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+
+			-- Diagnostics config
+			vim.diagnostic.config({
+				virtual_text = true,
+				signs = true,
+				underline = true,
+				update_in_insert = true,
+				severity_sort = false,
+				float = {
+					border = "rounded",
+				},
+			})
+
+			-- Autocmd for diagnostics
+			vim.api.nvim_create_autocmd("CursorHold", {
+				group = vim.api.nvim_create_augroup("LspDiagnostics", { clear = true }),
+				callback = function()
+					vim.diagnostic.open_float(nil, { focus = false })
+				end,
+				desc = "Show diagnostics on CursorHold",
+			})
 		end,
 	},
 }
