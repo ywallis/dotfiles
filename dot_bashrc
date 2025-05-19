@@ -130,3 +130,6 @@ export PATH=$PATH:$HOME/go/bin
 
 
 . "$HOME/.local/share/../bin/env"
+
+# Turso
+export PATH="$PATH:/home/yann/.turso"

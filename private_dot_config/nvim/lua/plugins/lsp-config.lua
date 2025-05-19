@@ -17,6 +17,7 @@ return {
 		"neovim/nvim-lspconfig",
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			capabilities.offsetEncoding = { "utf-8" }
 			local lspconfig = require("lspconfig")
 
 			-- Generic on_attach function
@@ -53,7 +54,7 @@ return {
 						analysis = {
 							typeCheckingMode = "standard",
 							autoSearchPaths = true,
-							diagnosticMode = "openFilesOnly",
+							diagnosticMode = "workspace",
 							useLibraryCodeForTypes = true,
 							autoSave = "onWindowChange",
 							diagnosticSeverityOverrides = {
