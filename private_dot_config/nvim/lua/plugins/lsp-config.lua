@@ -1,3 +1,5 @@
+local lsp_format_group = vim.api.nvim_create_augroup("LspFormatOnSave", { clear = true })
+
 return {
 	{
 		"williamboman/mason.nvim",
@@ -10,7 +12,7 @@ return {
 		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff", "gopls" },
-				automatic_enable = false
+				automatic_enable = false,
 			})
 		end,
 	},
@@ -21,14 +23,35 @@ return {
 			capabilities.offsetEncoding = { "utf-8" }
 			local lspconfig = require("lspconfig")
 
-			-- Generic on_attach function
-			local on_attach = function(client)
+			local on_attach = function(client, bufnr)
 				if client.name == "ruff" then
 					client.server_capabilities.hoverProvider = false
 				end
-			end
 
-			-- Gopls
+				-- Format on save
+				if client.server_capabilities.documentFormattingProvider then
+					vim.api.nvim_clear_autocmds({ group = lsp_format_group, buffer = bufnr })
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						group = lsp_format_group,
+						buffer = bufnr,
+						callback = function()
+							vim.lsp.buf.format({ bufnr = bufnr })
+
+							-- If this is ruff, also organize imports
+							if client.name == "ruff" then
+								vim.lsp.buf.code_action({
+									context = {
+										only = { "source.organizeImports" },
+										diagnostics = {},
+									},
+									apply = true,
+								})
+							end
+						end,
+						desc = "Format and organize imports on save",
+					})
+				end
+			end -- Gopls
 			lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
 
 			-- Lua ls
