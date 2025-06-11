@@ -133,3 +133,6 @@ export PATH=$PATH:$HOME/go/bin
 
 # Turso
 export PATH="$PATH:/home/yann/.turso"
+
+# Bat instead of cat
+alias cat='bat'
