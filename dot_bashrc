@@ -136,3 +136,10 @@ export PATH="$PATH:/home/yann/.turso"
 
 # Bat instead of cat
 alias cat='bat'
+
+# Lsd instead of ls
+alias ls='lsd'
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lt='ls --tree'
