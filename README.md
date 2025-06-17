@@ -1,6 +1,8 @@
-Starting a backup of my dotfiles using chezmoi
+Replication of my dev setup, so that I can feel at home almost anywhere.
 
-Feel free to use as inspiration, but will likely be heavily customized to my specific needs with time.
+Uses chezmoi, mainly for dotfiles, as well as for a couple scripts.
+
+I run Ubuntu everywhere, it helps reduce complexity.
 
 TODO: 
 
