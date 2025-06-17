@@ -9,10 +9,10 @@ mkdir -p ~/.local/bin
 ln -s /usr/bin/batcat ~/.local/bin/bat
 
 # Fd iso find
-sudo apt install fd-find
+sudo apt install -y fd-find
 ln -s $(which fdfind) ~/.local/bin/fd
 
 # LSD iso ls
 
-sudo apt install lsd
+sudo apt install -y lsd
 
