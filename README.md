@@ -1,9 +1,5 @@
-Starting a backup of my dotfiles using chezmoi
+Settings to feel at home anywhere.
 
-Feel free to use as inspiration, but will likely be heavily customized to my specific needs with time.
+Uses chezmoi to sync dotfiles and install a few things.
 
-TODO: 
-
-- Add TPM
-- Add UV
-- Add pyright
+I use Ubuntu everywhere, that helps.
