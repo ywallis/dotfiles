@@ -124,15 +124,16 @@ fi
 set -o vi
 export EDITOR=nvim
 
+# Add go to path
+
+export PATH=$PATH:/usr/local/go/bin
+
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 export PATH=$PATH:$HOME/go/bin
 
 
 . "$HOME/.local/share/../bin/env"
-
-# Turso
-export PATH="$PATH:/home/yann/.turso"
 
 # Bat instead of cat
 alias cat='bat'
