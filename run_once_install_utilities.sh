@@ -18,5 +18,5 @@ sudo apt install -y lsd
 
 # Caps to esc
 
-sudo add-apt-repository ppa:deafmute/interception
-sudo apt install interception-caps2esc
+sudo add-apt-repository -y ppa:deafmute/interception
+sudo apt install -y interception-caps2esc
