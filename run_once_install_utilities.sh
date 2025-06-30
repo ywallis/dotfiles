@@ -16,3 +16,7 @@ ln -s $(which fdfind) ~/.local/bin/fd
 
 sudo apt install -y lsd
 
+# Caps to esc
+
+sudo add-apt-repository ppa:deafmute/interception
+sudo apt install interception-caps2esc
