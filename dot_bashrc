@@ -144,3 +144,8 @@ alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias lt='ls --tree'
+
+# Load my secret keys if the file exists
+if [ -f "$HOME/.bash_keys" ]; then
+    . "$HOME/.bash_keys"
+fi

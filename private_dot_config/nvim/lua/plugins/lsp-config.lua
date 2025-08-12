@@ -78,7 +78,7 @@ return {
 						analysis = {
 							typeCheckingMode = "standard",
 							autoSearchPaths = true,
-							diagnosticMode = "workspace",
+							diagnosticMode = "openFilesOnly",
 							useLibraryCodeForTypes = true,
 							autoSave = "onWindowChange",
 							diagnosticSeverityOverrides = {
@@ -104,8 +104,7 @@ return {
 
 			-- Keymaps and Hover
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
-				{ border = "rounded" })
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 			vim.keymap.set("n", "<leader>er", vim.diagnostic.open_float, {})
 			vim.keymap.set("n", "<leader>en", vim.diagnostic.goto_next, {})
 			vim.keymap.set("n", "<leader>ep", vim.diagnostic.goto_prev, {})
