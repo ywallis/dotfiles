@@ -6,6 +6,7 @@ vim.opt.relativenumber = true
 -- Spell checking
 vim.opt.spell = true
 vim.opt.spelllang = "en_us"
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 
 local argv = vim.fn.argv()
 local file = argv[1] or ""
