@@ -11,7 +11,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff", "gopls" },
+				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff", "gopls", "pyrefly" },
 				automatic_enable = false,
 			})
 		end,
@@ -70,25 +70,28 @@ return {
 				on_attach = on_attach,
 			})
 
-			-- Based pyright
-			lspconfig.basedpyright.setup({
-				capabilities = capabilities,
-				settings = {
-					basedpyright = {
-						analysis = {
-							typeCheckingMode = "standard",
-							autoSearchPaths = true,
-							diagnosticMode = "openFilesOnly",
-							useLibraryCodeForTypes = true,
-							autoSave = "onWindowChange",
-							diagnosticSeverityOverrides = {
-								reportUnusedVariable = "none",
-								reportUnusedImport = "none",
-							},
-						},
-					},
-				},
-			})
+			-- -- Based pyright
+			-- lspconfig.basedpyright.setup({
+			-- 	capabilities = capabilities,
+			-- 	settings = {
+			-- 		basedpyright = {
+			-- 			analysis = {
+			-- 				typeCheckingMode = "standard",
+			-- 				autoSearchPaths = true,
+			-- 				diagnosticMode = "openFilesOnly",
+			-- 				useLibraryCodeForTypes = true,
+			-- 				autoSave = "onWindowChange",
+			-- 				diagnosticSeverityOverrides = {
+			-- 					reportUnusedVariable = "none",
+			-- 					reportUnusedImport = "none",
+			-- 				},
+			-- 			},
+			-- 		},
+			-- 	},
+			-- })
+
+			-- -- Pyrefly
+			lspconfig.pyrefly.setup({ capabilities = capabilities, on_attach = on_attach })
 
 			-- Rust analyzer
 			lspconfig.rust_analyzer.setup({
@@ -104,7 +107,8 @@ return {
 
 			-- Keymaps and Hover
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
+				{ border = "rounded" })
 			vim.keymap.set("n", "<leader>er", vim.diagnostic.open_float, {})
 			vim.keymap.set("n", "<leader>en", vim.diagnostic.goto_next, {})
 			vim.keymap.set("n", "<leader>ep", vim.diagnostic.goto_prev, {})
