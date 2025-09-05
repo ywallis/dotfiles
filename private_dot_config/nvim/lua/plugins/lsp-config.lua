@@ -1,111 +1,118 @@
-local lsp_format_group = vim.api.nvim_create_augroup("LspFormatOnSave", { clear = true })
-
 return {
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
+		lazy = false,
 		config = function()
 			require("mason").setup()
 		end,
 	},
+	"neovim/nvim-lspconfig",
 	{
-		"williamboman/mason-lspconfig.nvim",
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "basedpyright", "rust_analyzer", "taplo", "ruff", "gopls", "pyrefly" },
-				automatic_enable = false,
-			})
-		end,
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = {
+			"mason-org/mason.nvim",
+			"neovim/nvim-lspconfig",
+		},
+		opts = {
+			ensure_installed = {
+				-- LSP
+				"lua_ls",
+				-- "pyrefly",
+				"basedpyright",
+				"gopls",
+				"ruff",
+				"taplo",
+				"bashls",
+				"docker_compose_language_service",
+				-- Conform
+			},
+		},
 	},
+
+	-- Configure format-on-save with conform.nvim.
+	{
+		"stevearc/conform.nvim",
+		opts = {
+			format_on_save = {
+				timeout_ms = 500,
+				lsp_format = "fallback",
+			},
+			-- Define formatters for filetypes.
+			formatters_by_ft = {
+				lua = { "stylua" },
+				python = { "ruff_format", "ruff_organize_imports" },
+			},
+		},
+	},
+
+	-- Custom LSP configurations and overrides.
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			capabilities.offsetEncoding = { "utf-8" }
-			local lspconfig = require("lspconfig")
-
-			local on_attach = function(client, bufnr)
-				if client.name == "ruff" then
-					client.server_capabilities.hoverProvider = false
-				end
-
-				-- Format on save
-				if client.server_capabilities.documentFormattingProvider then
-					vim.api.nvim_clear_autocmds({ group = lsp_format_group, buffer = bufnr })
-					vim.api.nvim_create_autocmd("BufWritePre", {
-						group = lsp_format_group,
-						buffer = bufnr,
-						callback = function()
-							vim.lsp.buf.format({ bufnr = bufnr })
-
-							-- If this is ruff, also organize imports
-							if client.name == "ruff" then
-								vim.lsp.buf.code_action({
-									context = {
-										only = { "source.organizeImports" },
-										diagnostics = {},
-									},
-									apply = true,
-								})
-							end
-						end,
-						desc = "Format and organize imports on save",
-					})
-				end
-			end -- Gopls
-			lspconfig.gopls.setup({ capabilities = capabilities, on_attach = on_attach })
-
-			-- Lua ls
-			lspconfig.lua_ls.setup({ capabilities = capabilities, on_attach = on_attach })
-
-			-- Taplo
-			lspconfig.taplo.setup({ on_attach = on_attach })
-
-			-- Ruff
-			lspconfig.ruff.setup({
+			-- Configure Ruff for linting.
+			vim.lsp.config('ruff', {
 				init_options = {
 					settings = {
-						organizeImports = true,
+						logLevel = 'debug',
 					},
 				},
-				on_attach = on_attach,
 			})
+			vim.lsp.enable('ruff')
 
-			-- -- Based pyright
-			-- lspconfig.basedpyright.setup({
-			-- 	capabilities = capabilities,
-			-- 	settings = {
-			-- 		basedpyright = {
-			-- 			analysis = {
-			-- 				typeCheckingMode = "standard",
-			-- 				autoSearchPaths = true,
-			-- 				diagnosticMode = "openFilesOnly",
-			-- 				useLibraryCodeForTypes = true,
-			-- 				autoSave = "onWindowChange",
-			-- 				diagnosticSeverityOverrides = {
-			-- 					reportUnusedVariable = "none",
-			-- 					reportUnusedImport = "none",
-			-- 				},
-			-- 			},
-			-- 		},
-			-- 	},
-			-- })
-
-			-- -- Pyrefly
-			lspconfig.pyrefly.setup({ capabilities = capabilities, on_attach = on_attach })
-
-			-- Rust analyzer
-			lspconfig.rust_analyzer.setup({
-				capabilities = capabilities,
+			-- -- pyrefly
+			-- vim.lsp.enable('pyrefly')
+			-- based pyright
+			vim.lsp.config("basedpyright", {
 				settings = {
-					["rust-analyzer"] = {
-						diagnostics = {
-							enable = false,
+					basedpyright = {
+						analysis = {
+							typeCheckingMode = "standard",
+							autoSearchPaths = true,
+							diagnosticMode = "openFilesOnly",
+							useLibraryCodeForTypes = true,
+							autoSave = "onWindowChange",
+							diagnosticSeverityOverrides = {
+								reportUnusedVariable = "none",
+								reportUnusedImport = "none",
+							},
+						},
+					},
+				}
+			})
+			vim.lsp.enable('basedpyright')
+
+
+			-- bashls
+			vim.lsp.enable("bashls")
+
+			-- LuaLS
+			vim.lsp.config('lua_ls', {
+				settings = {
+					Lua = {
+						runtime = {
+							version = 'LuaJIT',
 						},
 					},
 				},
 			})
+			vim.lsp.enable('lua_ls')
+
+			-- gopls
+			vim.lsp.enable("gopls")
+
+			-- docker compose
+			vim.lsp.enable("docker_compose_language_service")
+			local function set_filetype(pattern, filetype)
+				vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+					pattern = pattern,
+					command = "set filetype=" .. filetype,
+				})
+			end
+
+			set_filetype({ "docker-compose.yml" }, "yaml.docker-compose")
 
 			-- Keymaps and Hover
+			local opts = { noremap = true, silent = true }
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
 				{ border = "rounded" })
@@ -114,6 +121,8 @@ return {
 			vim.keymap.set("n", "<leader>ep", vim.diagnostic.goto_prev, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+			vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
 
 			-- Diagnostics config
 			vim.diagnostic.config({
