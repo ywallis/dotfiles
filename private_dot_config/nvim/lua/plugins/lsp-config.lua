@@ -100,6 +100,9 @@ return {
 			-- gopls
 			vim.lsp.enable("gopls")
 
+			-- docker
+			vim.lsp.enable("dockerls")
+
 			-- docker compose
 			vim.lsp.enable("docker_compose_language_service")
 			local function set_filetype(pattern, filetype)
