@@ -156,5 +156,20 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# Let keychain do its thing
-eval $(keychain --eval --agents ssh)
+### START-Keychain ###
+# Let's re-use ssh-agent and/or gpg-agent between logins
+
+# Define the path to your keys file
+KEYS_FILE="$HOME/.keychain_keys.txt"
+
+# Read the keys from the file and pass them to keychain
+if [ -f "$KEYS_FILE" ]; then
+	KEYS=$(tr '\n' ' ' <"$KEYS_FILE")
+	/usr/bin/keychain -q $KEYS
+else
+	# Fallback to default behavior if the file doesn't exist
+	/usr/bin/keychain -q
+fi
+
+source $HOME/.keychain/$HOSTNAME-sh
+### End-Keychain ###
