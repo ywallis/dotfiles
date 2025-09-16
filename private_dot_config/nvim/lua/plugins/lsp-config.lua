@@ -19,6 +19,7 @@ return {
 				"lua_ls",
 				-- "pyrefly",
 				"basedpyright",
+				"jsonls",
 				"gopls",
 				"ruff",
 				"taplo",
@@ -97,6 +98,9 @@ return {
 			})
 			vim.lsp.enable('lua_ls')
 
+			-- jsonls
+
+			vim.lsp.enable('jsonls')
 			-- gopls
 			vim.lsp.enable("gopls")
 
