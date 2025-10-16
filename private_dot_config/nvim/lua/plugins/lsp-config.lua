@@ -17,6 +17,8 @@ return {
 			ensure_installed = {
 				-- LSP
 				"lua_ls",
+				-- "zuban",
+				-- "ty",
 				-- "pyrefly",
 				"basedpyright",
 				"jsonls",
@@ -60,7 +62,22 @@ return {
 			})
 			vim.lsp.enable('ruff')
 
-			-- -- pyrefly
+			-- zuban
+			-- vim.lsp.enable('zuban')
+			-- ty
+			-- vim.lsp.config('ty', {
+			-- 	settings = {
+			-- 		ty = {
+			-- 			disableLanguageServices = false,
+			-- 			diagnosticMode = 'workspace',
+			-- 			experimental = {
+			-- 				autoImport = true,
+			-- 			},
+			-- 		},
+			-- 	},
+			-- })
+			-- vim.lsp.enable("ty")
+			-- pyrefly
 			-- vim.lsp.enable('pyrefly')
 			-- based pyright
 			vim.lsp.config("basedpyright", {
@@ -70,6 +87,8 @@ return {
 							typeCheckingMode = "standard",
 							autoSearchPaths = true,
 							diagnosticMode = "openFilesOnly",
+							-- noticably slower
+							-- diagnosticMode = "workspace",
 							useLibraryCodeForTypes = true,
 							autoSave = "onWindowChange",
 							diagnosticSeverityOverrides = {
