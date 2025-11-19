@@ -173,3 +173,8 @@ fi
 
 source $HOME/.keychain/$HOSTNAME-sh
 ### End-Keychain ###
+
+. "$HOME/.atuin/bin/env"
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash)"

@@ -68,9 +68,9 @@ return {
 			-- vim.lsp.config('ty', {
 			-- 	settings = {
 			-- 		ty = {
-			-- 			disableLanguageServices = false,
 			-- 			diagnosticMode = 'workspace',
 			-- 			experimental = {
+			-- 				rename = true,
 			-- 				autoImport = true,
 			-- 			},
 			-- 		},
