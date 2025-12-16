@@ -15,19 +15,16 @@ return {
 		},
 		opts = {
 			ensure_installed = {
-				-- LSP
 				"lua_ls",
-				-- "zuban",
 				-- "ty",
-				-- "pyrefly",
 				"basedpyright",
+				"ts_ls",
 				"jsonls",
 				"gopls",
 				"ruff",
 				"taplo",
 				"bashls",
 				"docker_compose_language_service",
-				-- Conform
 			},
 		},
 	},
@@ -35,19 +32,29 @@ return {
 	-- Configure format-on-save with conform.nvim.
 	{
 		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
 		opts = {
 			format_on_save = {
 				timeout_ms = 500,
 				lsp_format = "fallback",
 			},
-			-- Define formatters for filetypes.
+			formatters = {
+				prettier = {
+					prepend_args = { "--prose-wrap", "always" },
+					require_cwd = false,
+				},
+			},
 			formatters_by_ft = {
 				lua = { "stylua" },
 				python = { "ruff_format", "ruff_organize_imports" },
+				javascript = { "prettier" },
+				typescript = { "prettier" },
+				json = { "prettier" },
+				html = { "prettier" },
+				css = { "prettier" },
 			},
 		},
 	},
-
 	-- Custom LSP configurations and overrides.
 	{
 		"neovim/nvim-lspconfig",
@@ -57,17 +64,16 @@ return {
 				init_options = {
 					settings = {
 						logLevel = 'debug',
-					},
+					}
 				},
 			})
 			vim.lsp.enable('ruff')
 
-			-- zuban
-			-- vim.lsp.enable('zuban')
 			-- ty
 			-- vim.lsp.config('ty', {
 			-- 	settings = {
 			-- 		ty = {
+			-- 			disableLanguageServices = false,
 			-- 			diagnosticMode = 'workspace',
 			-- 			experimental = {
 			-- 				rename = true,
@@ -77,8 +83,7 @@ return {
 			-- 	},
 			-- })
 			-- vim.lsp.enable("ty")
-			-- pyrefly
-			-- vim.lsp.enable('pyrefly')
+
 			-- based pyright
 			vim.lsp.config("basedpyright", {
 				settings = {
@@ -90,7 +95,6 @@ return {
 							-- noticably slower
 							-- diagnosticMode = "workspace",
 							useLibraryCodeForTypes = true,
-							autoSave = "onWindowChange",
 							diagnosticSeverityOverrides = {
 								reportUnusedVariable = "none",
 								reportUnusedImport = "none",
@@ -101,6 +105,8 @@ return {
 			})
 			vim.lsp.enable('basedpyright')
 
+			-- ts_ls
+			vim.lsp.enable('ts_ls')
 
 			-- bashls
 			vim.lsp.enable("bashls")
@@ -118,8 +124,8 @@ return {
 			vim.lsp.enable('lua_ls')
 
 			-- jsonls
-
 			vim.lsp.enable('jsonls')
+
 			-- gopls
 			vim.lsp.enable("gopls")
 

@@ -8,7 +8,7 @@ return {
 
 		configs.setup({
 			auto_install = true,
-			ensure_installed = { "lua", "html", "python" },
+			ensure_installed = { "lua", "html", "python", "markdown", "markdown_inline" },
 			sync_install = false,
 			highlight = { enable = true },
 			indent = { enable = true },
