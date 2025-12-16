@@ -16,3 +16,4 @@ ln -s $(which fdfind) ~/.local/bin/fd
 
 sudo apt install -y lsd
 
+sudo apt install -y tmux
