@@ -17,7 +17,6 @@ local languages = {
 	'make',
 	'markdown',
 	'markdown_inline',
-	'norg',
 	'python',
 	'query',
 	'regex',

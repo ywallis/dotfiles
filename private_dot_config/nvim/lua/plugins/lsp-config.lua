@@ -1,12 +1,8 @@
 return {
 	{
 		"mason-org/mason.nvim",
-		lazy = false,
-		config = function()
-			require("mason").setup()
-		end,
+		opts = {}
 	},
-	"neovim/nvim-lspconfig",
 	{
 		"mason-org/mason-lspconfig.nvim",
 		dependencies = {
@@ -91,9 +87,9 @@ return {
 						analysis = {
 							typeCheckingMode = "standard",
 							autoSearchPaths = true,
-							diagnosticMode = "openFilesOnly",
+							-- diagnosticMode = "openFilesOnly",
 							-- noticably slower
-							-- diagnosticMode = "workspace",
+							diagnosticMode = "workspace",
 							useLibraryCodeForTypes = true,
 							diagnosticSeverityOverrides = {
 								reportUnusedVariable = "none",
@@ -104,6 +100,9 @@ return {
 				}
 			})
 			vim.lsp.enable('basedpyright')
+
+			-- Kotlin
+			vim.lsp.enable('kotlin_lsp')
 
 			-- ts_ls
 			vim.lsp.enable('ts_ls')
@@ -152,6 +151,7 @@ return {
 			vim.keymap.set("n", "<leader>en", vim.diagnostic.goto_next, {})
 			vim.keymap.set("n", "<leader>ep", vim.diagnostic.goto_prev, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+			vim.keymap.set("n", "gr", vim.lsp.buf.references, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
 			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
 			vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
