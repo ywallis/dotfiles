@@ -107,6 +107,9 @@ return {
 			-- ts_ls
 			vim.lsp.enable('ts_ls')
 
+			-- angular
+			vim.lsp.enable('angular_ls')
+
 			-- bashls
 			vim.lsp.enable("bashls")
 
