@@ -189,5 +189,7 @@ alias shrug='echo "¯\_(ツ)_/¯" | wl-copy'
 # opencode
 export PATH=/home/yann/.opencode/bin:$PATH
 
-# Lazygit
+# Git
+alias gs='git status'
 alias lg='lazygit'
+alias glo='git log --oneline'
