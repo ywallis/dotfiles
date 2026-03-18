@@ -11,6 +11,7 @@ local languages = {
 	'html',
 	'javascript',
 	'json',
+	'kotlin',
 	'latex',
 	'lua',
 	'luadoc',

@@ -17,6 +17,7 @@ return {
 				"ts_ls",
 				"jsonls",
 				"gopls",
+				"kotlin_lsp",
 				"ruff",
 				"taplo",
 				"bashls",
