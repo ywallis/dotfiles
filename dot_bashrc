@@ -185,6 +185,7 @@ export NVM_DIR="$HOME/.config/nvm"
 
 
 alias shrug='echo "¯\_(ツ)_/¯" | wl-copy'
+alias c='clear'
 
 # opencode
 export PATH=/home/yann/.opencode/bin:$PATH
@@ -193,3 +194,5 @@ export PATH=/home/yann/.opencode/bin:$PATH
 alias gs='git status'
 alias lg='lazygit'
 alias glo='git log --oneline'
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
