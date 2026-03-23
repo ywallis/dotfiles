@@ -47,9 +47,9 @@ return {
 		vim.keymap.set("n", "goo", function() return require("opencode").operator("@this ") .. "_" end,
 			{ desc = "Add line to opencode", expr = true })
 
-		vim.keymap.set("n", "<S-C-u>", function() require("opencode").command("session.half.page.up") end,
+		vim.keymap.set("n", "<C-K>", function() require("opencode").command("session.half.page.up") end,
 			{ desc = "Scroll opencode up" })
-		vim.keymap.set("n", "<S-C-d>", function() require("opencode").command("session.half.page.down") end,
+		vim.keymap.set("n", "<C-J>", function() require("opencode").command("session.half.page.down") end,
 			{ desc = "Scroll opencode down" })
 
 		-- You may want these if you use the opinionated `<C-a>` and `<C-x>` keymaps above — otherwise consider `<leader>o…` (and remove terminal mode from the `toggle` keymap)
