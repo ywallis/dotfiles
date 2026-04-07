@@ -190,9 +190,17 @@ alias c='clear'
 # opencode
 export PATH=/home/yann/.opencode/bin:$PATH
 
+# Lazy
+alias lg='lazygit'
+alias ldd='lazydocker'
+
 # Git
 alias gs='git status'
-alias lg='lazygit'
 alias glo='git log --oneline'
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+
+# Taskbase
+
+alias tbl='cd /home/yann/code/code.taskbase.com/tb && npm run tblaunch'
+
