@@ -1,4 +1,4 @@
-return {
+return { {
 	'saghen/blink.cmp',
 	-- optional: provides snippets for the snippet source
 	dependencies = { 'rafamadriz/friendly-snippets' },
@@ -50,4 +50,11 @@ return {
 		fuzzy = { implementation = "prefer_rust_with_warning" }
 	},
 	opts_extend = { "sources.default" }
-}
+},
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
+		-- use opts = {} for passing setup options
+		-- this is equivalent to setup({}) function
+	} }
